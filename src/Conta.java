@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Conta implements IConta {
 	
@@ -8,6 +10,8 @@ public abstract class Conta implements IConta {
 	protected int numero;
 	protected double saldo;
 	protected Cliente cliente;
+	public static List<String> listaClientes;
+
 
 	public Conta(Cliente cliente) {
 		this.agencia = Conta.AGENCIA_PADRAO;
@@ -17,7 +21,11 @@ public abstract class Conta implements IConta {
 
 	@Override
 	public void sacar(double valor) {
-		saldo -= valor;
+		if(saldo > valor) {
+			saldo -= valor;
+		} else {
+			System.out.println("Saldo insuficiente");
+		}
 	}
 
 	@Override
@@ -27,8 +35,12 @@ public abstract class Conta implements IConta {
 
 	@Override
 	public void transferir(double valor, IConta contaDestino) {
-		this.sacar(valor);
-		contaDestino.depositar(valor);
+		if(saldo > valor) {
+			this.sacar(valor);
+			contaDestino.depositar(valor);
+		} else {
+			System.out.println("Impossível transferir valor, saldo insuficiente");
+		}
 	}
 
 	public int getAgencia() {
